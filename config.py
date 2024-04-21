@@ -13,8 +13,8 @@ class DevelopmentConfig(Config):
 
 
 class StagingConfig(Config):
-    DATABASE_URI = 'postgresql://postgres:Zanto123@localhost/flask'
+    DATABASE_URI = 'postgresql://postgres:password@localhost/flask'
 
 
 class ProductionConfig(Config):
-    DATABASE_URI = 'postgresql://postgres:Zanto123@localhost/flask'
+    DATABASE_URI = 'postgresql://postgres:password@localhost/flask'
