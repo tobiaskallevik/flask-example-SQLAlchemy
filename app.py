@@ -168,7 +168,7 @@ def FUN_delete_user(id):
         for f in images_to_remove:
             image_to_delete_from_pool = [y for y in [x for x in os.listdir(app.config['UPLOAD_FOLDER'])] if y.split("-", 1)[0] == f][0]
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], image_to_delete_from_pool))
-        # [2] Delele the records in database files
+        #[2] Delele the records in database files
         delete_user_from_db(id)
         return(redirect(url_for("FUN_admin")))
     else:
