@@ -20,6 +20,13 @@ The main purpose is to introduce how to implement the essential elements in web 
 
 For more basic knowledge of Flask, you can refer to [a tutorial on Tutorialspoint](https://www.tutorialspoint.com/flask/).
 
+## Additional Features
+- Set up support for SQLALchemy
+- Different database for different environments
+- Set the environment using set FLASK_ENV=development(windows) or export FLASK_ENV=development(linux/mac)
+- Check the environment using echo %FLASK_ENV% (windows) or echo $FLASK_ENV(linux/mac)
+
+
 
 ## How to Run
 

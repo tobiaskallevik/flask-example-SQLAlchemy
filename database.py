@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import hashlib
 import datetime
@@ -5,13 +6,19 @@ from sqlalchemy import create_engine, Table, MetaData, delete, select, insert, u
 from sqlalchemy.orm import sessionmaker
 from werkzeug.security import check_password_hash
 import hashlib
+from app import app
 
-engine = create_engine('sqlite:///database_file/flask.db', echo=True)
-metadata = MetaData()
-metadata.bind = engine
-Session = sessionmaker(bind=engine)
+# Set up the database
+with app.app_context():
+    database_uri = app.config['DATABASE_URI']
+    engine = create_engine(database_uri, echo=True)
+    metadata = MetaData()
+    metadata.bind = engine
+    Session = sessionmaker(bind=engine)
+    print("Database type:", engine.dialect.name)
 
 
+# List all users in the database
 def list_users():
     session = Session()
     users_table = Table('users', metadata, autoload_with=engine)
@@ -19,7 +26,7 @@ def list_users():
     session.close()
     return result
 
-
+# Verify the user's credentials
 def verify(id, pw):
     session = Session()
     users_table = Table('users', metadata, autoload_with=engine)
@@ -29,7 +36,7 @@ def verify(id, pw):
         return user.pw == hashlib.sha256(pw.encode()).hexdigest()
     return False
 
-
+# Delete a user from the database
 def delete_user_from_db(id):
     session = Session()
     users_table = Table('users', metadata, autoload_with=engine)
@@ -37,7 +44,7 @@ def delete_user_from_db(id):
     session.commit()
     session.close()
 
-
+# Add a user to the database
 def add_user(id, pw):
     session = Session()
     users_table = Table('users', metadata, autoload_with=engine)
@@ -45,7 +52,7 @@ def add_user(id, pw):
     session.commit()
     session.close()
 
-
+# Update a user's password
 def read_note_from_db(id):
     session = Session()
     notes_table = Table('notes', metadata, autoload_with=engine)
@@ -53,7 +60,7 @@ def read_note_from_db(id):
     session.close()
     return result
 
-
+# Read a note from the database
 def match_user_id_with_note_id(note_id):
     session = Session()
     notes_table = Table('notes', metadata, autoload_with=engine)
@@ -61,7 +68,7 @@ def match_user_id_with_note_id(note_id):
     session.close()
     return result
 
-
+# Write a note to the database
 def write_note_into_db(id, note_to_write):
     session = Session()
     notes_table = Table('notes', metadata, autoload_with=engine)
@@ -72,7 +79,7 @@ def write_note_into_db(id, note_to_write):
     session.commit()
     session.close()
 
-
+# Update a note in the database
 def delete_note_from_db(note_id):
     session = Session()
     notes_table = Table('notes', metadata, autoload_with=engine)
@@ -80,7 +87,7 @@ def delete_note_from_db(note_id):
     session.commit()
     session.close()
 
-
+# Update a note in the database
 def image_upload_record(uid, owner, image_name, timestamp):
     session = Session()
     images_table = Table('images', metadata, autoload_with=engine)
@@ -88,7 +95,7 @@ def image_upload_record(uid, owner, image_name, timestamp):
     session.commit()
     session.close()
 
-
+# List all images for a user
 def list_images_for_user(owner):
     session = Session()
     images_table = Table('images', metadata, autoload_with=engine)
@@ -97,7 +104,7 @@ def list_images_for_user(owner):
     session.close()
     return result
 
-
+# Match a user ID with an image UID
 def match_user_id_with_image_uid(image_uid):
     session = Session()
     images_table = Table('images', metadata, autoload_with=engine)
@@ -105,7 +112,7 @@ def match_user_id_with_image_uid(image_uid):
     session.close()
     return result
 
-
+# Delete an image from the database
 def delete_image_from_db(image_uid):
     session = Session()
     images_table = Table('images', metadata, autoload_with=engine)
